@@ -1,7 +1,8 @@
 name: tester
 on:
   pull_request:
-    branches: [ dev ]
+    branches:
+      - 'contestant/**'
 jobs: 
   test-validator:
     runs-on: ubuntu-latest
