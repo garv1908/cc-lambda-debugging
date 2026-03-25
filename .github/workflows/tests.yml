@@ -1,4 +1,5 @@
 name: tester
+
 on:
   pull_request:
     branches:
@@ -9,6 +10,7 @@ on:
       - reopened
       - synchronize
       - ready_for_review
+
 jobs:
   pr-title-validator:
     runs-on: ubuntu-latest
@@ -36,8 +38,30 @@ jobs:
       - name: Checkout to working directory
         uses: actions/checkout@v5
       - name: Run Easy tests
-        run: python3 easy/test_lambda_function1.py
+        env:
+          PR_USER: ${{ github.event.pull_request.user.login }}
+          PR_DATE: ${{ github.event.pull_request.created_at}}
+        run: |
+          declare -i score = tail $(python3 easy/test_lambda_function1.py) -1
+          if [ -n `grep $PR_USER leaderboard` ]; then
+            echo "$PR_USER $PR_DATE $score" >> leaderboard
       - name: Run Medium tests
         run: python3 medium/test_lambda_function2.py
       - name: Run Hard tests
         run: python3 hard/test_lambda_function3.py
+
+  scoreboard-updater:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - name: Update Leaderboard
+        run: |
+          if [ -n `grep ${{ github.event.pull_request.title }} leaderboard` ]; then
+            title="${{ github.event.pull_request.title }}"
+
+
+          
+
+
