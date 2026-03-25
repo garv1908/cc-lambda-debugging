@@ -42,9 +42,16 @@ jobs:
           PR_USER: ${{ github.event.pull_request.user.login }}
           PR_DATE: ${{ github.event.pull_request.created_at}}
         run: |
-          declare -i score = tail $(python3 easy/test_lambda_function1.py) -1
+          case=$(python3 easy/test_lambda_function1.py | tail -1)
           if [ -n `grep $PR_USER leaderboard` ]; then
-            echo "$PR_USER $PR_DATE $score" >> leaderboard
+            last=`echo $case | grep FAILED`
+            last=`echo $last | sed -e 's/[^0-9]/ /g'`
+            if [ ! "$last" =~ [0-9] ]; then
+              echo "$PR_USER $PR_DATE $score 10" >> leaderboard
+            else
+              echo "$PR_USER $PR_DATE "
+            fi
+          fi
       - name: Run Medium tests
         run: python3 medium/test_lambda_function2.py
       - name: Run Hard tests
