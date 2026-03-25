@@ -50,17 +50,6 @@ jobs:
       - name: Run Hard tests
         run: python3 hard/test_lambda_function3.py
 
-  scoreboard-updater:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: .
-    steps:
-      - name: Update Leaderboard
-        run: |
-          if [ -n `grep ${{ github.event.pull_request.title }} leaderboard` ]; then
-            title="${{ github.event.pull_request.title }}"
-
 
           
 
