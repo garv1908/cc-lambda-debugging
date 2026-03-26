@@ -29,15 +29,21 @@ jobs:
   test-validator:
     needs: pr-title-validator
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        suite:
+          - name: Easy
+            path: easy/test_lambda_function1.py
+          - name: Medium
+            path: medium/test_lambda_function2.py
+          - name: Hard
+            path: hard/test_lambda_function3.py
     defaults:
       run:
         working-directory: ./challenges
     steps:
       - name: Checkout to working directory
         uses: actions/checkout@v5
-      - name: Run Easy tests
-        run: python3 easy/test_lambda_function1.py
-      - name: Run Medium tests
-        run: python3 medium/test_lambda_function2.py
-      - name: Run Hard tests
-        run: python3 hard/test_lambda_function3.py
+      - name: Run ${{ matrix.suite.name }} tests
+        run: python3 ${{ matrix.suite.path }}
