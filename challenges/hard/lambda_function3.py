@@ -34,7 +34,7 @@ def lambda_handler(event, context=None):
     for n, char in enumerate(expr):
 
         if char in ["+", "-", "/", "*"]:
-            a, b = int(res[-1]), int(res[-2])
+            a, b = int(res[-2]), int(res[-1])
             
             res.pop()
             res.pop()
@@ -49,5 +49,5 @@ def lambda_handler(event, context=None):
 
     return {
         'statusCode': 200,
-        'body': res
+        'body': res[0]
     }
