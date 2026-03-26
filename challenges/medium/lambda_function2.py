@@ -3,7 +3,7 @@ Medium Translator Lambda Function
 
 Given a word, convert all vowels and Y into the NATO phonetic alphabet
 
-A -> Alpha
+"A": "Alpha",
 E -> Echo
 I -> India
 O -> Oscar
@@ -30,11 +30,21 @@ def lambda_handler(event, context=None):
             'statusCode': 400,
             'body': json.dumps('Error: word field does not exist')
         }
+
+    charToWord = {
+        "A": "Alpha",
+        "E": "Echo",
+        "I": "India",
+        "O": "Oscar",
+        "U": "Uniform",
+        "Y": "Yankee"
+    }
     
     for char in word:
-        res.append(char)
+        if char.upper() not in "AEIOUY": res.append(char)
+        else: res.append(charToWord[char.upper()])
 
     return {
         'statusCode': 200,
-        'body': res
+        'body': ''.join(res)
     }
