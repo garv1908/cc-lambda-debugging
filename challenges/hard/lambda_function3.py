@@ -31,12 +31,21 @@ def lambda_handler(event, context=None):
     expr = expr.split(" ")
     res = []
 
-    for char in expr:
+    for n, char in enumerate(expr):
 
         if char in ["+", "-", "/", "*"]:
-            pass
+            a, b = int(res[-1]), int(res[-2])
+            
+            res.pop()
+            res.pop()
+
+            if char is "+": res.append(a+b)
+            if char is "-": res.append(a-b)
+            if char is "/": res.append(a/b)
+            if char is "*": res.append(a*b)
+            
         else:
-            res.append(char)
+            res.append(int(char))
 
     return {
         'statusCode': 200,
