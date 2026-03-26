@@ -16,7 +16,8 @@ def lambda_handler(event, context=None):
             'body': json.dumps('Error: temperature field is required')
         }
     
-    fahrenheit = celsius * 9/5
+    # °F = (°C × 1.8) + 32
+    fahrenheit = (celsius * (9/5)) + 32
     fahrenheit = int(fahrenheit)
     
     return {
